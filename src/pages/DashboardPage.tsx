@@ -7,53 +7,54 @@ import { MeeBotNFTAbi } from "../abi/MeeBotNFT";
 import { ERC20Abi } from "../abi/ERC20";
 import { CONTRACT_ADDRESSES } from "../constants/addresses";
 import { getGatewayUrl, getMeeBotImageUrl } from "../utils/ipfs";
+import AvatarCustomizer from "../components/AvatarCustomizer";
+
+// --- Components ย่อย ---
 
 const StatCard: React.FC<{ label: string; value: string; icon: string }> = ({ label, value, icon }) => (
-  <div className="bg-meebot-surface border border-meebot-border p-6 rounded-2xl hover:border-meebot-accent/50 transition-all duration-300 hover:shadow-[0_0_15px_rgba(255,137,6,0.15)] group">
+  <div className="bg-meebot-surface/50 border border-meebot-border p-6 rounded-2xl hover:border-meebot-accent/50 transition-all duration-300 hover:shadow-[0_0_20px_rgba(255,137,6,0.1)] group backdrop-blur-sm">
     <div className="flex justify-between items-start mb-4">
-        <h3 className="text-meebot-text-secondary font-medium">{label}</h3>
-        <span className="text-2xl group-hover:scale-110 transition-transform">{icon}</span>
+        <h3 className="text-meebot-text-secondary font-bold text-sm uppercase tracking-wider">{label}</h3>
+        <span className="text-2xl group-hover:rotate-12 transition-transform">{icon}</span>
     </div>
-    <p className="text-3xl font-bold text-meebot-text-primary">{value}</p>
+    <p className="text-3xl font-black text-white">{value}</p>
   </div>
 );
 
 const MeeBotCard: React.FC<{ bot: any }> = ({ bot }) => (
-  <div className="bg-meebot-surface border border-meebot-border rounded-xl overflow-hidden hover:shadow-[0_0_20px_rgba(242,95,76,0.2)] transition-all group animate-float" style={{ animationDuration: '4s' }}>
-    <div className="aspect-square bg-meebot-bg relative overflow-hidden flex items-center justify-center">
+  <div className="bg-meebot-surface border border-meebot-border rounded-2xl overflow-hidden hover:border-meebot-accent transition-all duration-500 group relative">
+    <div className="aspect-square bg-black/40 relative overflow-hidden flex items-center justify-center">
       {bot.image ? (
         <img 
             src={bot.image} 
             alt={bot.name} 
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-            onError={(e) => { (e.target as HTMLImageElement).src = "https://placehold.co/400x400/23212d/f25f4c?text=Ritual+Image"; }}
+            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+            onError={(e) => { (e.target as HTMLImageElement).src = "https://placehold.co/400x400/23212d/f25f4c?text=MeeBot"; }}
         />
       ) : (
-        <div className="text-6xl opacity-20">🤖</div>
+        <div className="text-6xl opacity-20 animate-pulse">🤖</div>
       )}
-      <div className="absolute top-2 right-2 bg-black/60 backdrop-blur-md px-2 py-1 rounded text-xs text-white border border-white/10">
-        #{bot.tokenId}
+      <div className="absolute bottom-3 left-3 bg-black/70 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-bold text-meebot-accent border border-meebot-accent/30">
+        ID: #{bot.tokenId}
       </div>
     </div>
-    <div className="p-4">
-        <h4 className="font-bold text-meebot-text-primary truncate">{bot.name}</h4>
-        <p className="text-xs text-meebot-text-secondary mt-1 truncate opacity-70">{bot.description}</p>
+    <div className="p-4 bg-gradient-to-b from-transparent to-black/20">
+        <h4 className="font-bold text-white truncate text-lg">{bot.name}</h4>
+        <p className="text-xs text-meebot-text-secondary mt-1 line-clamp-2 min-h-[32px]">{bot.description || "No description provided."}</p>
     </div>
-      <div className="animate-meechain-dapp bg-slate-900 p-6 rounded-2xl border border-amber-500/20">
-        <h1 className="text-2xl font-bold text-amber-500">MeeChain DApp Initialized</h1>
-        <p className="text-slate-400">ระบบเริ่มต้นการทำงานเรียบร้อย...</p>
-      </div>
   </div>
 );
 
-import AvatarCustomizer from "../components/AvatarCustomizer";
+// --- Main Page ---
 
 const DashboardPage: React.FC = () => {
   const { t } = useTranslation();
   const client = usePublicClient();
   const [ritualCount, setRitualCount] = useState<number>(0);
   const [myMeeBots, setMyMeeBots] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
+  // ดึงข้อมูลยอด MCB ที่ถูก Lock (TVL)
   const { data: tvl } = useReadContract({
     address: CONTRACT_ADDRESSES.MeeToken as `0x${string}`,
     abi: ERC20Abi,
@@ -61,6 +62,7 @@ const DashboardPage: React.FC = () => {
     args: [CONTRACT_ADDRESSES.MeeBotStaking],
   });
 
+  // ดึงจำนวน NFT ทั้งหมดที่ถูก Mint
   const { data: minted } = useReadContract({
     address: CONTRACT_ADDRESSES.MeeBotNFT as `0x${string}`,
     abi: MeeBotNFTAbi,
@@ -73,7 +75,7 @@ const DashboardPage: React.FC = () => {
     
     const fetchLogs = async () => {
         try {
-            // Safe event lookup
+            setLoading(true);
             const mintEvent = MeeBotNFTAbi.find(x => x.type === 'event' && x.name === 'MeeBotMinted');
             
             const [nftLogs, stakingLogs] = await Promise.all([
@@ -90,50 +92,33 @@ const DashboardPage: React.FC = () => {
             
             setRitualCount((nftLogs?.length || 0) + (stakingLogs?.length || 0));
 
-            if (!nftLogs) return;
+            if (nftLogs) {
+                const bots = await Promise.all(nftLogs.map(async (log: any) => {
+                    if (!log || !log.args || log.args.tokenId == null) return null;
+                    try {
+                        const tokenId = log.args.tokenId.toString();
+                        const rawUri = log.args.prompt || "";
+                        let botData = { tokenId, name: `MeeBot #${tokenId}`, description: rawUri, image: "" };
 
-            // Parse NFT Logs to get Metadata
-            const bots = await Promise.all(nftLogs.map(async (log: any) => {
-                // Defensive check: Ensure log, args, and tokenId exist before accessing .toString()
-                if (!log || !log.args || log.args.tokenId == null) return null;
-                
-                try {
-                    const tokenId = log.args.tokenId.toString();
-                    const rawUri = log.args.prompt || "";
-                    
-                    let botData = {
-                        tokenId,
-                        name: `MeeBot #${tokenId}`,
-                        description: rawUri,
-                        image: ""
-                    };
-
-                    // Check if URI is an IPFS link
-                    if (rawUri && rawUri.startsWith("ipfs://")) {
-                        const metadataUrl = getGatewayUrl(rawUri);
-                        const res = await fetch(metadataUrl);
-                        if (res.ok) {
-                            const metadata = await res.json();
-                            botData.name = metadata.name || botData.name;
-                            botData.description = metadata.description || botData.description;
-                            
-                            if (metadata.image) {
-                                botData.image = getMeeBotImageUrl(metadata.image);
+                        if (rawUri && rawUri.startsWith("ipfs://")) {
+                            const metadataUrl = getGatewayUrl(rawUri);
+                            const res = await fetch(metadataUrl);
+                            if (res.ok) {
+                                const metadata = await res.json();
+                                botData.name = metadata.name || botData.name;
+                                botData.description = metadata.description || botData.description;
+                                if (metadata.image) botData.image = getMeeBotImageUrl(metadata.image);
                             }
                         }
-                    }
-
-                    return botData;
-                } catch (err) {
-                    console.warn("Skipping invalid log", err);
-                    return null;
-                }
-            }));
-
-            setMyMeeBots(bots.filter(b => b !== null));
-
+                        return botData;
+                    } catch (err) { return null; }
+                }));
+                setMyMeeBots(bots.filter(b => b !== null));
+            }
         } catch (e) {
             console.error("Failed to fetch logs", e);
+        } finally {
+            setLoading(false);
         }
     };
     
@@ -144,84 +129,78 @@ const DashboardPage: React.FC = () => {
   const formattedMinted = minted?.toString() || "0";
 
   return (
-    <div className="space-y-8 animate-float">
-      <header className="text-center py-10">
-        <h2 className="text-4xl md:text-5xl font-bold text-meebot-text-primary mb-4">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
+      {/* Header Section */}
+      <header className="text-center space-y-4">
+        <h2 className="text-4xl md:text-6xl font-black text-white tracking-tight italic">
             {t("dash.welcome")}
         </h2>
-        <p className="text-meebot-text-secondary max-w-lg mx-auto">
-            Review your assets, check the network status, and prepare for your next ritual.
+        <p className="text-meebot-text-secondary max-w-2xl mx-auto text-lg">
+            Manage your digital assets, monitor network health, and execute your next blockchain ritual.
         </p>
       </header>
 
-      {/* Avatar Customization Section */}
-      <div className="max-w-2xl mx-auto">
+      {/* Avatar Customization - Focus Area */}
+      <section className="bg-gradient-to-b from-meebot-surface/30 to-transparent p-1 rounded-3xl border border-meebot-border/50">
         <AvatarCustomizer />
-      </div>
+      </section>
 
-      <div className="grid md:grid-cols-3 gap-6">
-        <StatCard 
-            label="Total Value Locked" 
-            value={`${Number(formattedTvl).toFixed(2)} MCB`} 
-            icon="💎" 
-        />
-        <StatCard 
-            label="MeeBots Minted" 
-            value={formattedMinted} 
-            icon="🤖" 
-        />
-        <StatCard 
-            label="Rituals Performed" 
-            value={ritualCount.toString()} 
-            icon="🔥" 
-        />
-      </div>
+      {/* Stats Grid */}
+      <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <StatCard label="Total Value Locked" value={`${Number(formattedTvl).toLocaleString()} MCB`} icon="💎" />
+        <StatCard label="MeeBots Minted" value={formattedMinted} icon="🤖" />
+        <StatCard label="Rituals Performed" value={ritualCount.toString()} icon="🔥" />
+      </section>
 
       {/* NFT Gallery Section */}
-      <div className="mt-12">
-        <div className="flex items-center justify-between mb-6">
-            <h3 className="text-2xl font-bold text-meebot-text-primary flex items-center gap-2">
-                <span>🖼️</span> Your Collection
-            </h3>
-            <Link to="/gallery" className="text-meebot-accent hover:text-white transition-colors text-sm font-bold flex items-center gap-1 group">
-                View Full Gallery <span className="group-hover:translate-x-1 transition-transform">→</span>
+      <section className="space-y-6">
+        <div className="flex items-end justify-between border-b border-meebot-border pb-4">
+            <div>
+              <h3 className="text-2xl font-bold text-white flex items-center gap-2">
+                  <span className="text-meebot-accent">🖼️</span> Your Collection
+              </h3>
+              <p className="text-sm text-meebot-text-secondary mt-1">Recently summoned units in your command.</p>
+            </div>
+            <Link to="/gallery" className="px-4 py-2 bg-meebot-surface border border-meebot-border rounded-xl text-sm font-bold hover:bg-meebot-accent hover:text-white transition-all">
+                Full Gallery →
             </Link>
         </div>
         
-        {myMeeBots.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                {myMeeBots.slice(0, 4).map((bot) => ( // Limit to 4 for dashboard
-                    <MeeBotCard key={bot.tokenId} bot={bot} />
-                ))}
+        {loading ? (
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 animate-pulse">
+                {[1,2,3,4].map(i => <div key={i} className="aspect-square bg-meebot-surface rounded-2xl border border-meebot-border" />)}
+            </div>
+        ) : myMeeBots.length > 0 ? (
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+                {myMeeBots.slice(0, 4).map((bot) => <MeeBotCard key={bot.tokenId} bot={bot} />)}
             </div>
         ) : (
-            <div className="bg-meebot-surface/50 border border-dashed border-meebot-border rounded-xl p-12 text-center text-meebot-text-secondary">
-                <p className="text-xl mb-4">No MeeBots found in your altar.</p>
-                <Link to="/genesis" className="text-meebot-accent hover:underline">Summon one now →</Link>
+            <div className="bg-meebot-surface/30 border-2 border-dashed border-meebot-border rounded-3xl p-16 text-center group cursor-pointer hover:border-meebot-accent/50 transition-colors">
+                <div className="text-5xl mb-4 grayscale group-hover:grayscale-0 transition-all">🌑</div>
+                <p className="text-xl text-meebot-text-secondary mb-6 font-medium">No MeeBots found in your altar.</p>
+                <Link to="/genesis" className="inline-block px-8 py-3 bg-meebot-accent text-white rounded-full font-bold shadow-lg shadow-meebot-accent/20 hover:scale-105 transition-transform">
+                    Summon MeeBot Now
+                </Link>
             </div>
         )}
-      </div>
+      </section>
 
-      <div className="grid md:grid-cols-3 gap-6 mt-12">
-        <Link to="/genesis" className="bg-gradient-to-br from-meebot-surface to-meebot-bg border border-meebot-border p-8 rounded-2xl hover:border-meebot-highlight/50 transition-all group">
-            <h3 className="text-2xl font-bold text-meebot-highlight mb-2 flex items-center gap-2">
-                Start Genesis <span className="group-hover:translate-x-1 transition-transform">→</span>
-            </h3>
-            <p className="text-meebot-text-secondary">Create a new MeeBot and join the ecosystem.</p>
-        </Link>
-        <Link to="/staking" className="bg-gradient-to-br from-meebot-surface to-meebot-bg border border-meebot-border p-8 rounded-2xl hover:border-meebot-accent/50 transition-all group">
-            <h3 className="text-2xl font-bold text-meebot-accent mb-2 flex items-center gap-2">
-                Enter Staking <span className="group-hover:translate-x-1 transition-transform">→</span>
-            </h3>
-            <p className="text-meebot-text-secondary">Earn passive yield by locking your MCB tokens.</p>
-        </Link>
-        <Link to="/gallery" className="bg-gradient-to-br from-meebot-surface to-meebot-bg border border-meebot-border p-8 rounded-2xl hover:border-meebot-text-primary/50 transition-all group">
-            <h3 className="text-2xl font-bold text-meebot-text-primary mb-2 flex items-center gap-2">
-                View Gallery <span className="group-hover:translate-x-1 transition-transform">→</span>
-            </h3>
-            <p className="text-meebot-text-secondary">Browse the full collection of summoned MeeBots.</p>
-        </Link>
-      </div>
+      {/* Action Links */}
+      <section className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6">
+        {[
+          { to: "/genesis", title: "Genesis", desc: "Create new units", color: "text-meebot-highlight", icon: "✨" },
+          { to: "/staking", title: "Staking", desc: "Earn MCB rewards", color: "text-meebot-accent", icon: "⚡" },
+          { to: "/gallery", title: "Archive", desc: "Browse collection", color: "text-white", icon: "📚" }
+        ].map((item, idx) => (
+          <Link key={idx} to={item.to} className="group bg-meebot-surface/50 border border-meebot-border p-8 rounded-3xl hover:bg-meebot-accent/5 hover:border-meebot-accent transition-all">
+              <div className="text-3xl mb-4">{item.icon}</div>
+              <h3 className={`text-2xl font-bold ${item.color} mb-2 flex items-center gap-2`}>
+                  {item.title} <span className="opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all">→</span>
+              </h3>
+              <p className="text-meebot-text-secondary text-sm">{item.desc}</p>
+          </Link>
+        ))}
+      </section>
     </div>
   );
 };
