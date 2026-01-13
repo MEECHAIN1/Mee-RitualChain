@@ -14,7 +14,7 @@ import StakingPage from "./pages/StakingPage";
 import EventLogPage from "./pages/EventLogPage";
 import NFTGalleryPage from "./pages/NFTGalleryPage";
 import MiningPage from "./pages/MiningPage";
-import { RainbowKitProvider, ConnectButton } from "@rainbow-me/rainbowkit";
+import { RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import { WagmiProvider } from "wagmi";
 import { config } from "./wagmi";
 import { AvatarProvider } from "./context/AvatarContext";
