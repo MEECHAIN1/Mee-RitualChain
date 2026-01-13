@@ -18,7 +18,7 @@ import { RainbowKitProvider, darkTheme } from "@rainbow-me/rainbowkit";
 import { WagmiProvider } from "wagmi";
 import { config } from "./wagmi";
 import { AvatarProvider } from "./context/AvatarContext";
-//import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 const queryClient = new QueryClient();
 
@@ -57,8 +57,9 @@ const dummyItems = Array(20).fill(['⛏️', '⚡', '💎', '📜']).flat();
                    <DebugOverlay className="fixed bottom-4 right-4 z-[60]" />
                   </div>
                  </HashRouter>
-               </CelebrationProvider>
-              </TranslationProvider>
+                </CelebrationProvider>
+               </TranslationProvider>
+
              </AvatarProvider>
            </RainbowKitProvider> 
          </QueryClientProvider>
