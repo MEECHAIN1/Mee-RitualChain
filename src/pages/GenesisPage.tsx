@@ -46,7 +46,7 @@ const GenesisPage: React.FC = () => {
         const imageUri = await uploadToIPFS(file);
         
         // Convert ipfs:// to gateway url for local display
-        finalImageUrl = imageUri.replace("ipfs://", "https://aquamarine-rainy-dinosaur-738.mypinata.cloud/ipfs/");
+        finalImageUrl = imageUri.replace("ipfs://", "https://tan-familiar-impala-721.mypinata.cloud/ipfs/");
 
         triggerCelebration("🧾 Generating metadata...");
         const metadata = {

@@ -50,7 +50,7 @@ Preferred communication style: Simple, everyday language.
 
 ### IPFS Storage
 - **Provider**: Pinata Cloud for NFT metadata and image storage
-- **Gateway**: `aquamarine-rainy-dinosaur-738.mypinata.cloud`
+- **Gateway**: `tan-familiar-impala-721.mypinata.cloud`
 - **Configuration**: Requires `VITE_PINATA_JWT` or `VITE_PINATA_API_KEY` + `VITE_PINATA_API_SECRET`
 
 ### Wallet Connection
