@@ -8,7 +8,7 @@ const config = {
   networks: {
     hardhat: {},
     ritual: {
-      url: process.env.VITERPCURL || "http://127.0.0.1:8545",
+      url: process.env.VITERPCURL || "https://meechain1-mee-ritual-1xlf.bolt.host",
       chainId: parseInt(process.env.CHAIN_ID || "1337"),
       accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : undefined,
     },
