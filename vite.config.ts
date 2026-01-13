@@ -46,7 +46,6 @@ define: {
   'process.env': {}, 
   'import.meta.env.NODE_ENV': JSON.stringify(mode),
 },
-    },
     resolve: {
       alias: {
         '@': path.resolve(__dirname, 'src'),
@@ -68,4 +67,4 @@ define: {
       }
     }
   }
-})
+});
