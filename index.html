@@ -23,6 +23,12 @@
       }
     </script>
    <style>
+/* ปรับพื้นหลังและสีตัวอักษรหลัก */
+body, #root {
+   min-height: 100vh;
+   overflow-y: auto !important; /* บังคับให้เลื่อนได้ */
+   display: block; /* หรือ flex-column แต่ต้องไม่ล็อกความสูง */
+}
 /* Scrollbar สวยงาม */
 ::-webkit-scrollbar {
   width: 8px;
@@ -34,9 +40,9 @@
   background: #2e2f3e;
   border-radius: 4px;
 }
-/*::-webkit-scrollbar-thumb:hover {
+::-webkit-scrollbar-thumb:hover {
   background: #ff8906;
-}*/
+}
 /* ปรับปุ่ม Connect Wallet โดยไม่ใช้ !important */
 .rainbowkit-button {
   background-color: #ff8906;
@@ -52,13 +58,6 @@
   align-items: center;
   justify-content: center;
   white-space: nowrap;
-}
-
-/* ปรับพื้นหลังและสีตัวอักษรหลัก */
-body, #root {
-    min-height: 100vh;
-    overflow-y: auto !important; /* บังคับให้เลื่อนได้ */
-    display: block; /* หรือ flex-column แต่ต้องไม่ล็อกความสูง */
 }
     </style>
   <script type="importmap">
