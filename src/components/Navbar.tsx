@@ -2,44 +2,44 @@ import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "../utils/TranslationProvider";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { useAccount, useDisconnect } from "wagmi";
-import { useCelebration } from "../context/CelebrationContext";
-
-import { useAvatar } from "../context/AvatarContext";
+import { useAccount } from "wagmi";
 import NetworkSwitcher from "./NetworkSwitcher";
 
 const Navbar: React.FC = () => {
   const { t, language, setLanguage } = useTranslation();
   const location = useLocation();
-  const { address, isConnected } = useAccount();
-  const { triggerCelebration } = useCelebration();
-  const { avatar } = useAvatar();
+  const { isConnected } = useAccount();
 
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <nav className="sticky top-0 z-50 bg-meebot-surface/80 backdrop-blur-lg border-b border-meebot-border shadow-lg">
-      <div className="container mx-auto px-4 md:px-6 py-4 flex justify-between items-center gap-4">
+    <nav className="sticky top-0 z-[100] w-full bg-meebot-surface/90 backdrop-blur-xl border-b border-meebot-border/50 shadow-2xl">
+      <div className="container mx-auto px-4 md:px-6 h-20 flex justify-between items-center">
+        
+        {/* LOGO SECTION */}
         <Link to="/dashboard" className="flex items-center gap-3 group shrink-0">
-          <div className="relative">
-            <div className="absolute inset-0 bg-meebot-accent/20 blur-lg rounded-full animate-pulse group-hover:bg-meebot-accent/40"></div>
+          <div className="relative h-12 w-12">
+            <div className="absolute inset-0 bg-meebot-accent/30 blur-xl rounded-full animate-pulse group-hover:bg-meebot-accent/50 transition-all"></div>
             <img 
               src="/assets/logo.png" 
               alt="MeeChain Logo" 
-              className="w-10 h-10 md:w-12 md:h-12 object-contain relative transition-transform group-hover:scale-110 group-hover:rotate-6"
+              className="w-full h-full object-contain relative z-10 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-12"
             />
           </div>
-          <h1 className="text-xl md:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-meebot-text-primary to-meebot-accent tracking-tight">
-            MeeChain
-          </h1>
+          <div className="hidden sm:block">
+            <h1 className="text-xl md:text-2xl font-black bg-clip-text text-transparent bg-gradient-to-r from-white via-meebot-accent to-orange-400 tracking-tighter">
+              MEECHAIN
+            </h1>
+            <p className="text-[10px] text-meebot-text-secondary uppercase tracking-[0.2em] font-bold">MeeBot Ecosystem</p>
+          </div>
         </Link>
-        
-        <div className="flex items-center gap-2 md:gap-4 ml-auto">
-          <ul className="hidden lg:flex gap-1 bg-meebot-bg/50 p-1 rounded-full border border-meebot-border">
+
+        {/* CENTER NAVIGATION (DESKTOP) */}
+        <div className="hidden lg:flex items-center justify-center flex-1 mx-8">
+          <ul className="flex gap-1 bg-black/20 p-1.5 rounded-full border border-meebot-border/30 backdrop-blur-md">
             {[
                 { path: "/mining", label: "nav.mining", icon: "⛏️" },
                 { path: "/dashboard", label: "nav.dashboard", icon: "🔮" },
-                { path: "/genesis", label: "nav.genesis", icon: "" },
                 { path: "/staking", label: "nav.staking", icon: "⚡" },
                 { path: "/gallery", label: "nav.gallery", icon: "🖼️" },
                 { path: "/events", label: "nav.events", icon: "📜" }
@@ -47,45 +47,55 @@ const Navbar: React.FC = () => {
                 <li key={link.path}>
                     <Link 
                         to={link.path}
-                        className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 flex items-center gap-2 ${
+                        className={`px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 flex items-center gap-2 ${
                             isActive(link.path) 
-                            ? "bg-meebot-accent text-white shadow-[0_0_10px_rgba(255,137,6,0.4)]" 
-                            : "text-meebot-text-secondary hover:text-white hover:bg-meebot-surface"
+                            ? "bg-meebot-accent text-white shadow-lg shadow-meebot-accent/30 scale-105" 
+                            : "text-meebot-text-secondary hover:text-white hover:bg-white/5"
                         }`}
                     >
-                        <span>{link.icon}</span>
+                        <span className="text-base">{link.icon}</span>
                         {t(link.label)}
                     </Link>
                 </li>
             ))}
           </ul>
+        </div>
 
-          <div className="flex items-center gap-1 md:gap-2">
-            <div className="flex items-center">
-              <NetworkSwitcher />
-            </div>
-            <div className="rainbow-kit-button relative z-[60] scale-90 md:scale-100 origin-right">
-              <ConnectButton 
+        {/* RIGHT ACTION BUTTONS */}
+        <div className="flex items-center gap-2 md:gap-3">
+          {/* ระบบสลับ Chain - จัดให้อยู่ในระนาบเดียวกัน */}
+          <div className="hidden sm:block">
+            <NetworkSwitcher />
+          </div>
+
+          {/* Connect Wallet Wrapper */}
+          <div className="rainbow-kit-custom relative z-[110]">
+            <ConnectButton 
                 label={t("wallet.connect")}
                 showBalance={false} 
-                chainStatus="none"
-                accountStatus="address"
-              />
-            </div>
-            
-            <button 
-                onClick={() => setLanguage(language === 'en' ? 'th' : 'en')}
-                className="w-8 h-8 md:w-10 md:h-10 rounded-full border border-meebot-border flex items-center justify-center text-meebot-text-secondary hover:text-white hover:border-meebot-accent transition-colors relative z-[60] bg-meebot-surface"
-            >
-                {language === 'en' ? '🇺🇸' : '🇹🇭'}
-            </button>
+                chainStatus="none" // ปิดสถานะ Chain ของตัวมันเองเพื่อลดการซ้อน
+                accountStatus={{
+                  smallScreen: 'avatar',
+                  largeScreen: 'full',
+                }}
+            />
           </div>
+          
+          {/* ปุ่มเปลี่ยนภาษาแบบวงกลมสไตล์ Minimal */}
+          <button 
+              onClick={() => setLanguage(language === 'en' ? 'th' : 'en')}
+              className="w-10 h-10 rounded-xl border border-meebot-border/50 flex items-center justify-center text-lg hover:bg-meebot-accent/10 hover:border-meebot-accent transition-all active:scale-90 bg-meebot-surface shadow-inner"
+              title="Switch Language"
+          >
+              {language === 'en' ? '🇺🇸' : '🇹🇭'}
+          </button>
         </div>
       </div>
-      {/* Mobile Menu - Improved with horizontal scroll or better wrapping */}
-      <div className="lg:hidden flex overflow-x-auto no-scrollbar py-2 border-t border-meebot-border/50 bg-meebot-surface/50">
-        <div className="flex gap-4 px-4 min-w-max">
-             {[
+
+      {/* MOBILE SCROLL NAVIGATION (ด้านล่าง) */}
+      <div className="lg:hidden w-full overflow-x-auto no-scrollbar py-3 border-t border-meebot-border/30 bg-black/40 backdrop-blur-md">
+        <div className="flex gap-6 px-6 min-w-max">
+            {[
                 { path: "/mining", label: t("nav.mining") },
                 { path: "/dashboard", label: t("nav.dashboard") },
                 { path: "/genesis", label: t("nav.genesis") },
@@ -96,7 +106,11 @@ const Navbar: React.FC = () => {
                 <Link 
                     key={link.path}
                     to={link.path} 
-                    className={`text-sm font-medium whitespace-nowrap py-1 ${isActive(link.path) ? "text-meebot-accent border-b-2 border-meebot-accent" : "text-meebot-text-secondary"}`}
+                    className={`text-[13px] font-bold uppercase tracking-wider transition-all ${
+                      isActive(link.path) 
+                      ? "text-meebot-accent border-b-2 border-meebot-accent pb-1" 
+                      : "text-meebot-text-secondary"
+                    }`}
                 >
                     {link.label}
                 </Link>
