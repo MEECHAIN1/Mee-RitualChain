@@ -1,4 +1,4 @@
-modules = ["nodejs-20"]
+modules = ["nodejs-22"]
 
 [nix]
 channel = "stable-25_05"
@@ -74,7 +74,6 @@ localPort = 8081
 
 [deployment]
 build = ["npm", "run", "build"]
-run = ["sh", "-c", "npm run dev"]
 deploymentTarget = "cloudrun"
 
 [agent]
