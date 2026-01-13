@@ -4,7 +4,7 @@ import react from '@vitejs/plugin-react';
 import tsconfigPaths from "vite-tsconfig-paths";
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
 
-export default defineConfig(({ mode }) => {
+export default defineConfig({
   const env = loadEnv(mode, process.cwd(), '');
   return {
     plugins: [
