@@ -43,7 +43,7 @@ export default defineConfig(({ mode }) => {
     },
     build: {
       minify: 'esbuild',
-      sourcemap: false,
+      sourcemap: true,
       chunkSizeWarningLimit: 5000,
       reportCompressedSize: false,
       rollupOptions: {
