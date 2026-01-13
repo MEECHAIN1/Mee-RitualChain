@@ -74,7 +74,7 @@ const Navbar: React.FC = () => {
           </ul>
 
           <div className="flex items-center gap-1 md:gap-2">
-            <div className="hidden sm:block">
+            <div className="flex items-center">
               <NetworkSwitcher />
             </div>
             <div className="rainbow-kit-button relative z-[60] scale-90 md:scale-100 origin-right">

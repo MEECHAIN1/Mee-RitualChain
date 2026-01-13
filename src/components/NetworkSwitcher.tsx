@@ -32,15 +32,15 @@ const NetworkSwitcher = () => {
         className={`flex items-center gap-2 px-3 py-1.5 rounded-full border transition-all ${
           isRitual 
             ? 'bg-meebot-accent/10 border-meebot-accent text-meebot-accent' 
-            : 'bg-red-500/10 border-red-500 text-red-500'
+            : 'bg-meebot-highlight/10 border-meebot-highlight text-meebot-highlight'
         }`}
       >
-        <span className={`w-2 h-2 rounded-full animate-pulse ${isRitual ? 'bg-meebot-accent' : 'bg-red-500'}`}></span>
-        <span className="text-sm font-bold truncate max-w-[100px]">
+        <span className={`w-2 h-2 rounded-full animate-pulse ${isRitual ? 'bg-meebot-accent' : 'bg-meebot-highlight'}`}></span>
+        <span className="text-xs font-bold truncate max-w-[80px] md:max-w-[120px]">
           {currentChain?.name || 'Wrong Network'}
         </span>
         <svg
-          className={`w-4 h-4 transition-transform ${isOpen ? 'rotate-180' : ''}`}
+          className={`w-3 h-3 transition-transform ${isOpen ? 'rotate-180' : ''}`}
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
