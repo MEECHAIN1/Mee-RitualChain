@@ -4,47 +4,45 @@ import react from '@vitejs/plugin-react';
 import tsconfigPaths from "vite-tsconfig-paths";
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
 
-export default defineConfig({
-  const env = loadEnv(mode, process.cwd(), '');
+export default defineConfig(({ mode }) => {
+  // บรรทัดที่ 8 ต้องเป็นแบบนี้เท่านั้น
+  const env = loadEnv(mode, process.cwd(), ''); 
+
   return {
     plugins: [
       react(),
       tsconfigPaths(),
       nodePolyfills({
-        // ครอบคลุมการใช้งาน Buffer และ Global สำหรับ Web3
         globals: { Buffer: true, global: true, process: true }
       }),
     ],
-  server: {
-    host: true,
-    port: 3000,
-    watch: {
-      usePolling: true, // ช่วยให้เสถียรขึ้นบน Replit
+    server: {
+      host: true,
+      port: 3000,
+      strictPort: true,
+      watch: {
+        usePolling: true,
+      }
     },
-    hmr: {
-      overlay: false, // ปิดการแสดง error ทับหน้าจอที่ทำให้หน้าจอค้าง
-    }
-  },
-      include: [
-        'buffer', 
-        'process', 
-        'react', 
-        'react-dom', 
-        'wagmi', 
-        'viem', 
-        '@rainbow-me/rainbowkit'
-      ],
+    optimizeDeps: {
+      esbuildOptions: {
+        define: {
+          global: 'globalThis'
+        }
+      },
+      include: ['buffer', 'process', 'react', 'react-dom', 'wagmi', 'viem', '@rainbow-me/rainbowkit'],
     },
-define: {
-  'process.env': {}, 
-  'import.meta.env.NODE_ENV': JSON.stringify(mode),
-},
+    define: {
+      'process.env': {}, // ป้องกันปัญหาความปลอดภัยที่ Vite เตือน
+      'import.meta.env.NODE_ENV': JSON.stringify(mode),
+    },
     resolve: {
       alias: {
         '@': path.resolve(__dirname, 'src'),
-      }   
+      }
     },
-   build: {
+    build: {
+      target: 'esnext',
       rollupOptions: {
         output: {
           manualChunks: (id) => {
@@ -53,10 +51,10 @@ define: {
                 return 'wallet-vendor';
               }
               return 'vendor';
-             }
             }
           }
         }
       }
     }
   };
+});
