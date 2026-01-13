@@ -16,7 +16,7 @@ export default defineConfig(({ mode }) => {
     ],
     server: {
       host: true,
-      port: 5000, // เปลี่ยนให้ตรงกับที่ Replit คาดหวัง
+      port: 3000,
       allowedHosts: true,
     },
     // เพิ่มส่วนนี้เพื่อการ Deploy (Preview Mode)
