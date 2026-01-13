@@ -76,37 +76,38 @@ const App: React.FC = () => {
         <QueryClientProvider client={queryClient}>
           <RainbowKitProvider>
             <AvatarProvider>
-              <MiningProvider>
-                <TranslationProvider>
-                  <CelebrationProvider>
-                    <HashRouter>
-                      <div className="min-h-screen bg-meebot-bg text-meebot-text-primary flex flex-col font-sans selection:bg-meebot-accent selection:text-white relative overflow-x-hidden">
-                        <NetworkBanner />
-                        <Navbar />
-                        <main className="w-full flex-grow pb-24 md:pb-8">
-                          <Routes>
-                            <Route path="/" element={<Navigate to="/mining" replace />} />                        
-                            <Route path="/mining" element={<MiningPage />} />
-                            <Route path="/dashboard" element={<DashboardPage />} />
-                            <Route path="/genesis" element={<GenesisPage />} />
-                            <Route path="/staking" element={<StakingPage />} />
-                            <Route path="/gallery" element={<NFTGalleryPage />} />
-                            <Route path="/events" element={<EventLogPage />} />
-                            <Route path="/faucet" element={<RitualFaucet />} />
-                          </Routes>
-                        </main>
-                        <Footer />
-                        <DebugOverlay className="fixed bottom-4 right-4 z-[60]" />
-                      </div>
-                    </HashRouter>
-                  </CelebrationProvider>
-                </TranslationProvider>
-              </MiningProvider>
-            </AvatarProvider>
-          </RainbowKitProvider> 
-        </QueryClientProvider>
-      </WagmiProvider>
-    </React.StrictMode>
+              <TranslationProvider>
+                <CelebrationProvider>
+                  <HashRouter>
+                     <div className="min-h-screen bg-meebot-bg text-meebot-text-primary flex flex-col font-sans selection:bg-meebot-accent selection:text-white relative overflow-x-hidden">
+                      <NetworkBanner />
+                       <Navbar />
+                       <div style={{ position: 'relative', zIndex: 9999, marginBottom: '20px' }}>
+                       <ConnectButton />
+</div>
+                       <main className="w-full flex-grow pb-24 md:pb-8">
+                        <Routes>
+                        <Route path="/" element={<Navigate to="/mining" replace />} />                        
+                        <Route path="/mining" element={<MiningPage />} />
+                        <Route path="/dashboard" element={<DashboardPage />} />
+                        <Route path="/genesis" element={<GenesisPage />} />
+                        <Route path="/staking" element={<StakingPage />} />
+                        <Route path="/gallery" element={<NFTGalleryPage />} />
+                        <Route path="/events" element={<EventLogPage />} />
+                        <Route path="/faucet" element={<RitualFaucet />} />
+                      </Routes>
+                     </main>
+                    <Footer />
+                   <DebugOverlay className="fixed bottom-4 right-4 z-[60]" />
+                  </div>
+                 </HashRouter>
+                </CelebrationProvider>
+               </TranslationProvider>
+             </AvatarProvider>
+           </RainbowKitProvider> 
+         </QueryClientProvider>
+        </WagmiProvider>
+      </React.StrictMode>
   );
 };
 

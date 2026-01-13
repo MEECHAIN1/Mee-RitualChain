@@ -16,7 +16,7 @@ export default defineConfig(({ mode }) => {
     ],
     server: {
       host: true,
-      port: 5000, // เปลี่ยนให้ตรงกับที่ Replit คาดหวัง
+      port: 3000,
       allowedHosts: true,
     },
     // เพิ่มส่วนนี้เพื่อการ Deploy (Preview Mode)
@@ -41,21 +41,20 @@ export default defineConfig(({ mode }) => {
         '@': path.resolve(__dirname, 'src'),
       }
     },
-    build: {
-      minify: 'esbuild',
-      sourcemap: true,
-      chunkSizeWarningLimit: 5000,
-      reportCompressedSize: false,
-      rollupOptions: {
-        output: {
-          experimentalMinChunkSize: 5000,
-          manualChunks: (id) => {
-            if (id.includes('node_modules')) {
-              return 'vendor';
-            }
+build: {
+  rollupOptions: {
+    output: {
+      manualChunks: (id) => {
+        // แยก Library ของ Wallet ออกไปเป็นไฟล์ต่างหากชื่อ 'wallet-vendor'
+        if (id.includes('node_modules')) {
+          if (id.includes('@reown') || id.includes('@rainbow-me') || id.includes('wagmi')) {
+            return 'wallet-vendor';
           }
+          return 'vendor'; // Library อื่นๆ อยู่ใน vendor ปกติ
         }
       }
     }
-  };
-});
+  }
+ }
+}
+})
