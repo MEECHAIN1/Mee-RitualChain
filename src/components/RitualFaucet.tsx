@@ -5,6 +5,7 @@ import { privateKeyToAccount } from 'viem/accounts';
 import { ritualchain } from '../wagmi';
 
 // ดึงจาก env เพื่อหลบการสแกนของ Netlify
+// @ts-ignore
 const LOCAL_FUNDER_KEY = import.meta.env.VITE_LOCAL_FUNDER_KEY || "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80";
 
 const RITUAL_RPC = "https://tan-familiar-impala-721.mypinata.cloud";
@@ -34,7 +35,9 @@ export const RitualFaucet = () => {
       const hash = await funderClient.sendTransaction({
         to: address,
         value: parseEther('10'),
-      });
+        chain: ritualchain as Chain,
+        account: funderAccount
+      } as any);
 
       setTxHash(hash);
       alert("✅ 10 MCB ถูกส่งเข้ากระเป๋าคุณแล้ว!");
