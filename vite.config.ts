@@ -42,9 +42,10 @@ export default defineConfig(({ mode }) => {
         '@rainbow-me/rainbowkit'
       ],
     },
-    define: {
-      'process.env': env, // ช่วยให้ Library เก่าๆ ที่เรียก process.env ไม่พัง
-      'import.meta.env.NODE_ENV': JSON.stringify(mode),
+define: {
+  'process.env': {}, 
+  'import.meta.env.NODE_ENV': JSON.stringify(mode),
+},
     },
     resolve: {
       alias: {
