@@ -19,7 +19,7 @@ export const ritualchain = defineChain({
 export const config = getDefaultConfig({
   appName: "MeeChain",
   projectId: "b0d81328f8ab0541fdede7db9ff25cb1",
-  chains: [ritualchain, mainnet, sepolia, base, optimism, arbitrum, polygon, bsc ],
+  chains: [ritualchain, mainnet, sepolia, base, optimism, arbitrum, polygon ],
   transports: {
     [ritualchain.id]: http(undefined, {
         batch: {
