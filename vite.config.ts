@@ -60,10 +60,11 @@ define: {
                 return 'wallet-vendor';
               }
               return 'vendor';
+             }
             }
           }
         }
       }
-    } // ปิด build
-  }; // ปิด return
-}); // ปิด defineConfig
+    }
+  };
+});
