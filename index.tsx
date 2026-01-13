@@ -22,7 +22,8 @@ const rootElement = document.getElementById('root');
 
 if (rootElement) {
   createRoot(rootElement).render(
-      <QueryClientProvider client={queryClient}>
+     <WagmiProvider config={config}>
+       <QueryClientProvider client={queryClient}>
         <RainbowKitProvider
           theme={darkTheme({
             accentColor: "#ff8906",
@@ -32,5 +33,6 @@ if (rootElement) {
           <App />
         </RainbowKitProvider>
       </QueryClientProvider>
+   </WagmiProvider>
   );
 }
