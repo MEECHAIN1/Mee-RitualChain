@@ -74,9 +74,13 @@ localPort = 8081
 
 [deployment]
 build = ["npm", "run", "build"]
-run = ["sh", "-c", "ืืnpm run server"]
+run = ["sh", "-c", "npm run dev"]
 deploymentTarget = "cloudrun"
-publicDir = "dist"
 
 [agent]
 expertMode = true
+
+[userenv]
+
+[userenv.shared]
+SESSION_SECRET = "2ClD/Pnp33LYcTvbH0aHj5nnmYkaFv0E5h4AjmMuCMbCZOMD1zYpwb5a2LyDcOyh8a3wtcGvoYLxpd+hGqtjJA=="

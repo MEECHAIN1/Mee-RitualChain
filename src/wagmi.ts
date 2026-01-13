@@ -8,7 +8,7 @@ export const ritualchain = defineChain({
   name: "RitualChain Local",
   nativeCurrency: { name: "MeeChain Coin", symbol: "MCB", decimals: 18 },
   rpcUrls: { 
-    default: { http: ["https://replit.com/@t2rawanta/RitualChain"] } 
+    default: { http: ["https://ritual-chain--t2rawanta.replit.app"] } 
   },
   blockExplorers: {
     default: { name: "RitualScan", url: "https://ritual-scan.replit.app" }
@@ -18,7 +18,7 @@ export const ritualchain = defineChain({
 
 export const config = getDefaultConfig({
   appName: "MeeChain",
-  projectId: "eaaeb12e7ddec97201cb6e44202bea16",
+  projectId: "a71fb844b2cc0b677e83583e66c6b3e4a072106b",
   chains: [ritualchain, mainnet, sepolia, base, optimism, arbitrum, polygon, bsc ],
   transports: {
     [ritualchain.id]: http(undefined, {

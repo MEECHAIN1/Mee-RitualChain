@@ -37,7 +37,6 @@ const App: React.FC = () => {
           <div className="absolute inset-0 bg-meebot-accent/20 blur-[100px] rounded-full animate-pulse"></div>
           <div className="absolute -inset-4 border-2 border-meebot-accent/30 rounded-full animate-[ping_3s_linear_infinite]"></div>
           <div className="absolute -inset-8 border border-meebot-highlight/20 rounded-full animate-[ping_4s_linear_infinite]"></div>
-          
           <div className="relative animate-[bounce_2s_ease-in-out_infinite]">
             <img 
               src="/assets/logo.png" 
