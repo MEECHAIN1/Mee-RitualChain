@@ -25,7 +25,6 @@ export default defineConfig({
       overlay: false, // ปิดการแสดง error ทับหน้าจอที่ทำให้หน้าจอค้าง
     }
   },
-      // เพิ่ม Library สำคัญที่ต้องทำ Pre-bundle เพื่อป้องกันหน้าขาว/จอดำ
       include: [
         'buffer', 
         'process', 
