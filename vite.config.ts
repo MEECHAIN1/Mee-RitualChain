@@ -11,29 +11,39 @@ export default defineConfig(({ mode }) => {
       react(),
       tsconfigPaths(),
       nodePolyfills({
+        // ครอบคลุมการใช้งาน Buffer และ Global สำหรับ Web3
         globals: { Buffer: true, global: true, process: true }
       }),
     ],
     server: {
       host: true,
       port: 3000,
-      allowedHosts: true,
+      strictPort: true,
     },
-    // เพิ่มส่วนนี้เพื่อการ Deploy (Preview Mode)
     preview: {
       host: true,
       port: 5000,
-      strictPort: true, // ป้องกันการหนีไปพอร์ตอื่น
+      strictPort: true,
     },
     optimizeDeps: {
-      esbuildOption: {
+      esbuildOptions: { // แก้ไข: เติม 's' หลัง Option
         define: {
           global: 'globalThis'
         }
       },
-      include: ['buffer', 'process', 'react', 'react-dom', 'wagmi', 'viem'],
+      // เพิ่ม Library สำคัญที่ต้องทำ Pre-bundle เพื่อป้องกันหน้าขาว/จอดำ
+      include: [
+        'buffer', 
+        'process', 
+        'react', 
+        'react-dom', 
+        'wagmi', 
+        'viem', 
+        '@rainbow-me/rainbowkit'
+      ],
     },
     define: {
+      'process.env': env, // ช่วยให้ Library เก่าๆ ที่เรียก process.env ไม่พัง
       'import.meta.env.NODE_ENV': JSON.stringify(mode),
     },
     resolve: {
@@ -41,20 +51,20 @@ export default defineConfig(({ mode }) => {
         '@': path.resolve(__dirname, 'src'),
       }
     },
-build: {
-  rollupOptions: {
-    output: {
-      manualChunks: (id) => {
-        // แยก Library ของ Wallet ออกไปเป็นไฟล์ต่างหากชื่อ 'wallet-vendor'
-        if (id.includes('node_modules')) {
-          if (id.includes('@reown') || id.includes('@rainbow-me') || id.includes('wagmi')) {
-            return 'wallet-vendor';
+    build: {
+      target: 'esnext', // รองรับ BigInt (สำคัญมากสำหรับ Web3)
+      rollupOptions: {
+        output: {
+          manualChunks: (id) => {
+            if (id.includes('node_modules')) {
+              if (id.includes('@rainbow-me') || id.includes('wagmi') || id.includes('viem')) {
+                return 'wallet-provider';
+              }
+              return 'vendor';
+            }
           }
-          return 'vendor'; // Library อื่นๆ อยู่ใน vendor ปกติ
         }
       }
     }
   }
- }
-}
 })
