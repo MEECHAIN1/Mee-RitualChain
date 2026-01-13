@@ -2,17 +2,14 @@ import React, { useState, useEffect, useRef } from "react";
 import { useTranslation } from "../utils/TranslationProvider";
 import { useCelebration } from "../context/CelebrationContext";
 import { useAccount, useConnect } from "wagmi";
+import { useMining } from "../context/MiningContext";
 
 const MiningPage: React.FC = () => {
   const { t } = useTranslation();
   const { triggerCelebration } = useCelebration();
   const { isConnected } = useAccount();
   const { connectAsync, connectors } = useConnect();
-  
-  const [isMining, setIsMining] = useState(false);
-  const [minedAmount, setMinedAmount] = useState(0);
-  const [hashRate, setHashRate] = useState(0);
-  const [logs, setLogs] = useState<string[]>([]);
+  const { isMining, minedAmount, hashRate, logs, setIsMining, setLogs } = useMining();
   
   const logsRef = useRef<HTMLDivElement>(null);
 
@@ -22,40 +19,6 @@ const MiningPage: React.FC = () => {
         logsRef.current.scrollTop = logsRef.current.scrollHeight;
     }
   }, [logs]);
-
-  // Mining Loop
-  useEffect(() => {
-    let interval: ReturnType<typeof setInterval>;
-          if (isMining) {
-        interval = setInterval(() => {
-            
-            // Random flux in hashrate
-            const currentHash = 450 + Math.random() * 100;
-            setHashRate(currentHash);
-            
-            // Increment mined tokens (small amount)
-            setMinedAmount(prev => prev + 0.00042);
-
-            // Generate logs randomly
-            if (Math.random() > 0.7) {
-                const msgs = [
-                    "Found share difficulty 1024",
-                    "Channeling void flux...",
-                    "Block #88291 accepted",
-                    "Synthesizing MCB particle...",
-                    "Ritual resonance stabilized"
-                ];
-                const msg = msgs[Math.floor(Math.random() * msgs.length)];
-                setLogs(prev => [`[${new Date().toLocaleTimeString()}] ${msg}`, ...prev].slice(0, 20));
-            }
-
-        }, 500);
-    } else {
-        setHashRate(0);
-    }
-
-    return () => clearInterval(interval);
-  }, [isMining]);
 
   const toggleMining = async () => {
       if (!isConnected) {
@@ -152,8 +115,6 @@ const MiningPage: React.FC = () => {
                     onClick={() => {
                         if (minedAmount > 0) {
                             alert(`Claimed ${minedAmount.toFixed(6)} MCB!`);
-                            // Reset mined amount after claim for mock purposes
-                            // Note: In real app, this would be a contract call
                         }
                     }}
                 >

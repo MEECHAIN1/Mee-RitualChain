@@ -14,11 +14,11 @@ import StakingPage from "./pages/StakingPage";
 import EventLogPage from "./pages/EventLogPage";
 import NFTGalleryPage from "./pages/NFTGalleryPage";
 import MiningPage from "./pages/MiningPage";
-import { RainbowKitProvider, darkTheme } from "@rainbow-me/rainbowkit";
+import { RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import { WagmiProvider } from "wagmi";
 import { config } from "./wagmi";
 import { AvatarProvider } from "./context/AvatarContext";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { MiningProvider } from "./context/MiningContext";
 
 const queryClient = new QueryClient();
 
@@ -34,7 +34,6 @@ const App: React.FC = () => {
     return (
       <div className="fixed inset-0 z-[100] bg-meebot-bg flex flex-col items-center justify-center overflow-hidden font-sans">
         <div className="relative">
-          {/* Animated Glow Rings */}
           <div className="absolute inset-0 bg-meebot-accent/20 blur-[100px] rounded-full animate-pulse"></div>
           <div className="absolute -inset-4 border-2 border-meebot-accent/30 rounded-full animate-[ping_3s_linear_infinite]"></div>
           <div className="absolute -inset-8 border border-meebot-highlight/20 rounded-full animate-[ping_4s_linear_infinite]"></div>
@@ -78,35 +77,37 @@ const App: React.FC = () => {
         <QueryClientProvider client={queryClient}>
           <RainbowKitProvider>
             <AvatarProvider>
-              <TranslationProvider>
-                <CelebrationProvider>
-                  <HashRouter>
-                     <div className="min-h-screen bg-meebot-bg text-meebot-text-primary flex flex-col font-sans selection:bg-meebot-accent selection:text-white relative overflow-x-hidden">
-                      <NetworkBanner />
-                       <Navbar />
-                       <main className="w-full flex-grow pb-24 md:pb-8">
-                        <Routes>
-                        <Route path="/" element={<Navigate to="/mining" replace />} />                        
-                        <Route path="/mining" element={<MiningPage />} />
-                        <Route path="/dashboard" element={<DashboardPage />} />
-                        <Route path="/genesis" element={<GenesisPage />} />
-                        <Route path="/staking" element={<StakingPage />} />
-                        <Route path="/gallery" element={<NFTGalleryPage />} />
-                        <Route path="/events" element={<EventLogPage />} />
-                        <Route path="/faucet" element={<RitualFaucet />} />
-                      </Routes>
-                     </main>
-                    <Footer />
-                   <DebugOverlay className="fixed bottom-4 right-4 z-[60]" />
-                  </div>
-                 </HashRouter>
-                </CelebrationProvider>
-               </TranslationProvider>
-             </AvatarProvider>
-           </RainbowKitProvider> 
-         </QueryClientProvider>
-        </WagmiProvider>
-      </React.StrictMode>
+              <MiningProvider>
+                <TranslationProvider>
+                  <CelebrationProvider>
+                    <HashRouter>
+                      <div className="min-h-screen bg-meebot-bg text-meebot-text-primary flex flex-col font-sans selection:bg-meebot-accent selection:text-white relative overflow-x-hidden">
+                        <NetworkBanner />
+                        <Navbar />
+                        <main className="w-full flex-grow pb-24 md:pb-8">
+                          <Routes>
+                            <Route path="/" element={<Navigate to="/mining" replace />} />                        
+                            <Route path="/mining" element={<MiningPage />} />
+                            <Route path="/dashboard" element={<DashboardPage />} />
+                            <Route path="/genesis" element={<GenesisPage />} />
+                            <Route path="/staking" element={<StakingPage />} />
+                            <Route path="/gallery" element={<NFTGalleryPage />} />
+                            <Route path="/events" element={<EventLogPage />} />
+                            <Route path="/faucet" element={<RitualFaucet />} />
+                          </Routes>
+                        </main>
+                        <Footer />
+                        <DebugOverlay className="fixed bottom-4 right-4 z-[60]" />
+                      </div>
+                    </HashRouter>
+                  </CelebrationProvider>
+                </TranslationProvider>
+              </MiningProvider>
+            </AvatarProvider>
+          </RainbowKitProvider> 
+        </QueryClientProvider>
+      </WagmiProvider>
+    </React.StrictMode>
   );
 };
 
