@@ -20,30 +20,17 @@ const Navbar: React.FC = () => {
   return (
     <nav className="sticky top-0 z-50 bg-meebot-surface/80 backdrop-blur-lg border-b border-meebot-border shadow-lg">
       <div className="container mx-auto px-4 md:px-6 py-4 flex justify-between items-center gap-4">
-        <Link to="/dashboard" className="flex items-center gap-2 group shrink-0">
-          {/* Avatar Preview in Navbar */}
-          <div 
-            className="w-8 h-8 md:w-10 md:h-10 rounded-full border-2 border-meebot-accent relative flex items-center justify-center overflow-hidden transition-transform group-hover:scale-110 shadow-lg"
-            style={{ backgroundColor: avatar.skinColor }}
-          >
-             <span className="text-base md:text-lg">
-               {avatar.expression === 'smile' && '😊'}
-               {avatar.expression === 'neutral' && '😐'}
-               {avatar.expression === 'surprised' && '😲'}
-               {avatar.expression === 'cool' && '😎'}
-               {avatar.expression === 'happy' && '😁'}
-             </span>
-             {avatar.accessory !== 'none' && (
-               <div className="absolute top-0.5 right-0.5 text-[6px] md:text-[8px]">
-                  {avatar.accessory === 'glasses' && '👓'}
-                  {avatar.accessory === 'hat' && '🎩'}
-                  {avatar.accessory === 'necklace' && '📿'}
-                  {avatar.accessory === 'earrings' && '✨'}
-               </div>
-             )}
+        <Link to="/dashboard" className="flex items-center gap-3 group shrink-0">
+          <div className="relative">
+            <div className="absolute inset-0 bg-meebot-accent/20 blur-lg rounded-full animate-pulse group-hover:bg-meebot-accent/40"></div>
+            <img 
+              src="/assets/logo.png" 
+              alt="MeeChain Logo" 
+              className="w-10 h-10 md:w-12 md:h-12 object-contain relative transition-transform group-hover:scale-110 group-hover:rotate-6"
+            />
           </div>
-          <h1 className="text-xl md:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-meebot-text-primary to-meebot-accent">
-            RitualChain
+          <h1 className="text-xl md:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-meebot-text-primary to-meebot-accent tracking-tight">
+            MeeChain
           </h1>
         </Link>
         

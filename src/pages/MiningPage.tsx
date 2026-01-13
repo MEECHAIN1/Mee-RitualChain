@@ -101,11 +101,17 @@ const MiningPage: React.FC = () => {
                         </div>
                     </div>
 
-                    <div className="mb-8 text-center py-8 border-2 border-dashed border-meebot-border rounded-xl bg-meebot-bg/30">
-                        {/* ใส่ไว้เหนือส่วน Hashrate */}
-                        <div className="flex justify-center mb-4">
-                            <img src="/assets/neonova-silhouette.png" className="w-20 h-20 object-contain opacity-80" alt="MeeBot Miner" />
+                    <div className="mb-8 text-center py-8 border-2 border-dashed border-meebot-border rounded-xl bg-meebot-bg/30 relative">
+                        {/* MeeChain Brand Image */}
+                        <div className="flex justify-center mb-4 relative z-10">
+                            <div className={`transition-all duration-1000 ${isMining ? 'scale-110 drop-shadow-[0_0_20px_rgba(255,137,6,0.4)]' : 'opacity-80'}`}>
+                                <img src="/assets/logo.png" className={`w-24 h-24 object-contain ${isMining ? 'animate-[bounce_2s_ease-in-out_infinite]' : ''}`} alt="MeeChain Miner" />
+                            </div>
                         </div>
+                        {/* Background Pulse when mining */}
+                        {isMining && (
+                            <div className="absolute inset-0 bg-meebot-accent/5 animate-pulse rounded-xl"></div>
+                        )}
                         <span className="block text-meebot-text-secondary mb-2 text-sm">{t("mining.hashrate")}</span>
                         <span className={`text-4xl font-mono font-bold ${isMining ? 'text-meebot-accent' : 'text-meebot-text-secondary'}`}>
                             {hashRate.toFixed(2)} <span className="text-lg">MH/s</span>

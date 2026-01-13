@@ -23,7 +23,55 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 const queryClient = new QueryClient();
 
 const App: React.FC = () => {
-const dummyItems = Array(20).fill(['⛏️', '⚡', '💎', '📜']).flat();
+  const [showSplash, setShowSplash] = React.useState(true);
+
+  React.useEffect(() => {
+    const timer = setTimeout(() => setShowSplash(false), 2500);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (showSplash) {
+    return (
+      <div className="fixed inset-0 z-[100] bg-meebot-bg flex flex-col items-center justify-center overflow-hidden font-sans">
+        <div className="relative">
+          {/* Animated Glow Rings */}
+          <div className="absolute inset-0 bg-meebot-accent/20 blur-[100px] rounded-full animate-pulse"></div>
+          <div className="absolute -inset-4 border-2 border-meebot-accent/30 rounded-full animate-[ping_3s_linear_infinite]"></div>
+          <div className="absolute -inset-8 border border-meebot-highlight/20 rounded-full animate-[ping_4s_linear_infinite]"></div>
+          
+          <div className="relative animate-[bounce_2s_ease-in-out_infinite]">
+            <img 
+              src="/assets/logo.png" 
+              alt="MeeChain Logo" 
+              className="w-48 h-48 md:w-64 md:h-64 object-contain drop-shadow-[0_0_30px_rgba(255,137,6,0.5)]"
+            />
+          </div>
+        </div>
+        
+        <div className="mt-12 text-center">
+          <h2 className="text-4xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white via-meebot-accent to-meebot-highlight animate-pulse tracking-tighter">
+            MeeChain
+          </h2>
+          <div className="mt-4 flex flex-col items-center gap-2">
+            <div className="w-48 h-1.5 bg-meebot-surface rounded-full overflow-hidden border border-meebot-border">
+              <div className="h-full bg-gradient-to-r from-meebot-accent to-meebot-highlight animate-[loading_2.5s_ease-in-out_forwards]"></div>
+            </div>
+            <p className="text-meebot-text-secondary text-sm font-mono tracking-widest uppercase opacity-60 animate-pulse">
+              Initializing Ritual Protocol...
+            </p>
+          </div>
+        </div>
+
+        <style>{`
+          @keyframes loading {
+            0% { width: 0%; }
+            100% { width: 100%; }
+          }
+        `}</style>
+      </div>
+    );
+  }
+
   return (
     <React.StrictMode> 
       <WagmiProvider config={config}>
