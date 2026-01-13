@@ -6,6 +6,7 @@ import { useAccount, useDisconnect } from "wagmi";
 import { useCelebration } from "../context/CelebrationContext";
 
 import { useAvatar } from "../context/AvatarContext";
+import NetworkSwitcher from "./NetworkSwitcher";
 
 const Navbar: React.FC = () => {
   const { t, language, setLanguage } = useTranslation();
@@ -73,6 +74,9 @@ const Navbar: React.FC = () => {
           </ul>
 
           <div className="flex items-center gap-1 md:gap-2">
+            <div className="hidden sm:block">
+              <NetworkSwitcher />
+            </div>
             <div className="rainbow-kit-button relative z-[60] scale-90 md:scale-100 origin-right">
               <ConnectButton 
                 label={t("wallet.connect")}

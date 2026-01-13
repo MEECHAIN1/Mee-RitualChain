@@ -1,55 +1,86 @@
-import React from 'react';
-import { useChainId, useSwitchChain } from 'wagmi';
+import React, { useState, useRef, useEffect } from 'react';
+import { useAccount, useChainId, useSwitchChain } from 'wagmi';
+import { ritualchain } from '../wagmi';
+import { motion, AnimatePresence } from 'framer-motion';
 
-
-export const NetworkSwitcher = () => {
+const NetworkSwitcher = () => {
+  const { isConnected } = useAccount();
   const chainId = useChainId();
-  const { chains, switchChain, isPending, error } = useSwitchChain();
+  const { switchChain, chains } = useSwitchChain();
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  if (!isConnected) return null;
+
+  const currentChain = chains.find(c => c.id === chainId);
+  const isRitual = chainId === ritualchain.id;
 
   return (
-    <div className="p-4 border rounded-lg bg-gray-900 text-white border-gray-700 w-full max-w-md">
-      <h3 className="text-lg font-bold mb-4 flex items-center gap-2">
-        🌐 เลือกเครือข่าย (Network)
-      </h3>
+    <div className="relative" ref={dropdownRef}>
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className={`flex items-center gap-2 px-3 py-1.5 rounded-full border transition-all ${
+          isRitual 
+            ? 'bg-meebot-accent/10 border-meebot-accent text-meebot-accent' 
+            : 'bg-red-500/10 border-red-500 text-red-500'
+        }`}
+      >
+        <span className={`w-2 h-2 rounded-full animate-pulse ${isRitual ? 'bg-meebot-accent' : 'bg-red-500'}`}></span>
+        <span className="text-sm font-bold truncate max-w-[100px]">
+          {currentChain?.name || 'Wrong Network'}
+        </span>
+        <svg
+          className={`w-4 h-4 transition-transform ${isOpen ? 'rotate-180' : ''}`}
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="m19 9-7 7-7-7" />
+        </svg>
+      </button>
 
-      <div className="grid gap-2">
-        {chains.map((chain) => (
-          <button
-            key={chain.id}
-            onClick={() => switchChain({ chainId: chain.id })}
-            disabled={isPending || chain.id === chainId}
-            className={`
-              flex items-center justify-between px-4 py-3 rounded-lg transition-all border
-              ${chain.id === chainId 
-                ? 'bg-blue-900/30 border-blue-500 text-blue-400 cursor-default' 
-                : 'bg-gray-800 hover:bg-gray-700 border-transparent text-gray-300 hover:text-white hover:border-gray-600'}
-              ${isPending ? 'opacity-50 cursor-not-allowed' : ''}
-            `}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 10 }}
+            className="absolute right-0 mt-2 w-48 bg-meebot-surface border border-meebot-accent/30 rounded-xl shadow-xl overflow-hidden z-[100]"
           >
-            <div className="flex items-center gap-3">
-              <div className={`w-2 h-2 rounded-full ${chain.id === chainId ? 'bg-green-400 shadow-[0_0_8px_rgba(74,222,128,0.5)]' : 'bg-gray-600'}`} />
-              <span className="font-medium">{chain.name}</span>
+            <div className="p-2 space-y-1">
+              {chains.map((chain) => (
+                <button
+                  key={chain.id}
+                  onClick={() => {
+                    switchChain({ chainId: chain.id });
+                    setIsOpen(false);
+                  }}
+                  className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors ${
+                    chainId === chain.id 
+                      ? 'bg-meebot-accent text-white' 
+                      : 'hover:bg-meebot-accent/10 text-meebot-text-secondary hover:text-white'
+                  }`}
+                >
+                  <div className={`w-2 h-2 rounded-full ${chainId === chain.id ? 'bg-white' : 'bg-slate-600'}`}></div>
+                  {chain.name}
+                </button>
+              ))}
             </div>
-
-            {chain.id === chainId && (
-              <span className="text-xs font-bold bg-blue-500/20 text-blue-300 px-2 py-1 rounded border border-blue-500/30">
-                Connected
-              </span>
-            )}
-
-            {isPending && (
-               <span className="animate-spin text-gray-400">⌛</span>
-            )}
-          </button>
-        ))}
-      </div>
-
-      {error && (
-        <div className="mt-4 p-3 text-sm text-red-400 bg-red-900/20 rounded border border-red-900/50 flex items-start gap-2">
-          <span>⚠️</span>
-          <span>{error.message}</span>
-        </div>
-      )}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
+
+export default NetworkSwitcher;
