@@ -1,0 +1,40 @@
+.gate-ring,
+.portal-core-image {
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  /* ป้องกันภาพสั่นเวลาหมุนใน 3D space */
+  -webkit-font-smoothing: subpixel-antialiased;
+}
+
+.bg-neonova-nebula {
+  background: radial-gradient(circle at center, #1a0b2e 0%, #050505 100%);
+  background-attachment: scroll; /* Changed from fixed for mobile compatibility */
+}
+
+.bg-neonova-nebula::before {
+  content: "";
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  background-image: url('https://www.transparenttextures.com/patterns/stardust.png');
+  opacity: 0.1;
+  animation: drift 60s linear infinite;
+}
+
+@keyframes drift {
+  from {
+    transform: translate(-10%, -10%);
+  }
+
+
+  to {
+    transform: translate(0%, 0%);
+  }
+}
+
+.btn-summon {
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  position: relative;
+  overflow: hidden;
+}

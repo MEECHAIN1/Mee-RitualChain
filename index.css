@@ -1,0 +1,38 @@
+/* Global Styles */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+body {
+  background-color: #0f0e17;
+  color: #fffffe;
+  overflow-x: hidden;
+  -webkit-tap-highlight-color: transparent;
+}
+
+:root {
+  --neon-gold: #ffcc00;
+}
+
+/* Animations */
+@keyframes slideInDown {
+  0% { transform: translateY(-20px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+.animate-slide-in-down {
+  animation: slideInDown 0.5s ease-out forwards;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
+}
