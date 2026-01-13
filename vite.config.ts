@@ -51,20 +51,19 @@ define: {
         '@': path.resolve(__dirname, 'src')
       }   
     },
-    build: {
-      target: 'esnext', // รองรับ BigInt (สำคัญมากสำหรับ Web3)
+   build: {
       rollupOptions: {
         output: {
           manualChunks: (id) => {
             if (id.includes('node_modules')) {
-              if (id.includes('@rainbow-me') || id.includes('wagmi') || id.includes('viem')) {
-                return 'wallet-provider';
+              if (id.includes('@rainbow-me') || id.includes('wagmi')) {
+                return 'wallet-vendor';
               }
               return 'vendor';
             }
           }
         }
       }
-    }
-  }
-})
+    } // ปิด build
+  }; // ปิด return
+}); // ปิด defineConfig
