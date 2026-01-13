@@ -82,9 +82,6 @@ const App: React.FC = () => {
                      <div className="min-h-screen bg-meebot-bg text-meebot-text-primary flex flex-col font-sans selection:bg-meebot-accent selection:text-white relative overflow-x-hidden">
                       <NetworkBanner />
                        <Navbar />
-                       <div style={{ position: 'relative', zIndex: 9999, marginBottom: '20px' }}>
-                       <ConnectButton />
-</div>
                        <main className="w-full flex-grow pb-24 md:pb-8">
                         <Routes>
                         <Route path="/" element={<Navigate to="/mining" replace />} />                        
