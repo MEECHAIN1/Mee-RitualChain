@@ -25,19 +25,14 @@ const queryClient = new QueryClient();
 const App: React.FC = () => {
 const dummyItems = Array(20).fill(['⛏️', '⚡', '💎', '📜']).flat();
   return (
-    <React.StrictMode>
+    <React.StrictMode> 
       <WagmiProvider config={config}>
         <QueryClientProvider client={queryClient}>
-          <RainbowKitProvider
-            theme={darkTheme({
-              accentColor: "#ff8906",
-              accentColorForeground: "#ffffff",
-            })}
-            >
-                <AvatarProvider>
-                 <TranslationProvider>
-                  <CelebrationProvider>
-                    <HashRouter>
+          <RainbowKitProvider>
+            <AvatarProvider>
+              <TranslationProvider>
+                <CelebrationProvider>
+                  <HashRouter>
                      <div className="min-h-screen bg-meebot-bg text-meebot-text-primary flex flex-col font-sans selection:bg-meebot-accent selection:text-white relative overflow-x-hidden">
                       <NetworkBanner />
                        <Navbar />
@@ -59,7 +54,6 @@ const dummyItems = Array(20).fill(['⛏️', '⚡', '💎', '📜']).flat();
                  </HashRouter>
                 </CelebrationProvider>
                </TranslationProvider>
-
              </AvatarProvider>
            </RainbowKitProvider> 
          </QueryClientProvider>

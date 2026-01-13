@@ -74,8 +74,8 @@ localPort = 8081
 
 [deployment]
 build = ["npm", "run", "build"]
-run = ["sh", "-c", "npx vite preview --port 4173 --host"]
-deploymentTarget = "static"
+run = ["sh", "-c", "ืืnpm run server"]
+deploymentTarget = "cloudrun"
 publicDir = "dist"
 
 [agent]
