@@ -4,6 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>RitualChain - MeeBot</title>
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@rainbow-me/rainbowkit@2.0.2/dist/index.css">
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
@@ -22,61 +25,52 @@
         }
       }
     </script>
-   <style>
-/* ปรับพื้นหลังและสีตัวอักษรหลัก */
-body, #root {
-   min-height: 100vh;
-   overflow-y: auto !important; /* บังคับให้เลื่อนได้ */
-   display: block; /* หรือ flex-column แต่ต้องไม่ล็อกความสูง */
-}
-/* Scrollbar สวยงาม */
-::-webkit-scrollbar {
-  width: 8px;
-}
-::-webkit-scrollbar-track {
-  background: #0f0e17;
-}
-::-webkit-scrollbar-thumb {
-  background: #2e2f3e;
-  border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #ff8906;
-}
-/* ปรับปุ่ม Connect Wallet โดยไม่ใช้ !important */
-.rainbowkit-button {
-  background-color: #ff8906;
-  color: #ffffff;
-  border-radius: 0.5rem;
-  font-weight: 700;
-  font-size: 0.875rem;
-  padding: 0.5rem 1rem;
-  border: none;
-  transition: all 0.3s ease;
-  height: 38px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  white-space: nowrap;
-}
+    
+    <style>
+      /* บังคับความสูงและจัดการ Scrollbar */
+      html, body {
+        height: 100%;
+        background: #0f0e17;
+        margin: 0;
+        padding: 0;
+      }
+      #root {
+        min-height: 100%;
+        display: flex;
+        flex-direction: column;
+      }
+      
+      ::-webkit-scrollbar { width: 8px; }
+      ::-webkit-scrollbar-track { background: #0f0e17; }
+      ::-webkit-scrollbar-thumb { background: #2e2f3e; border-radius: 4px; }
+      ::-webkit-scrollbar-thumb:hover { background: #ff8906; }
+
+      /* จัดการ UI RainbowKit ให้ไม่ทับซ้อน */
+      .rainbow-kit-custom {
+        display: flex;
+        align-items: center;
+      }
     </style>
-  <script type="importmap">
-{
-  "imports": {
-    "react": "https://esm.sh/react@19.2.3",
-    "react/jsx-runtime": "https://esm.sh/react@19.2.3/jsx-runtime",
-    "react-dom": "https://esm.sh/react-dom@19.2.3",
-    "react-dom/client": "https://esm.sh/react-dom@19.2.3/client",
-    "react-router-dom": "https://esm.sh/react-router-dom@6.22.3?deps=react@19.2.3,react-dom@19.2.3",
-    "wagmi": "https://esm.sh/wagmi@2.5.7?deps=react@19.2.3,react-dom@19.2.3,viem@2.7.15,@tanstack/react-query@5.25.0",
-    "wagmi/connectors": "https://esm.sh/wagmi@2.5.7/connectors?deps=react@19.2.3,react-dom@19.2.3,viem@2.7.15",
-    "viem": "https://esm.sh/viem@2.7.15",
-    "@tanstack/react-query": "https://esm.sh/@tanstack/react-query@5.25.0?deps=react@19.2.3,react-dom@19.2.3"
-  }
-}
-</script>
- <body class="bg-meebot-bg text-meebot-text-primary">
-   <div id="root"></div>
-  <script type="module" src="/index.tsx"></script>
- </body>
+
+    <script type="importmap">
+    {
+      "imports": {
+        "react": "https://esm.sh/react@19.2.3",
+        "react/jsx-runtime": "https://esm.sh/react@19.2.3/jsx-runtime",
+        "react-dom": "https://esm.sh/react-dom@19.2.3",
+        "react-dom/client": "https://esm.sh/react-dom@19.2.3/client",
+        "react-router-dom": "https://esm.sh/react-router-dom@6.22.3?deps=react@19.2.3,react-dom@19.2.3",
+        "wagmi": "https://esm.sh/wagmi@2.5.7?deps=react@19.2.3,react-dom@19.2.3,viem@2.7.15,@tanstack/react-query@5.25.0",
+        "wagmi/connectors": "https://esm.sh/wagmi@2.5.7/connectors?deps=react@19.2.3,react-dom@19.2.3,viem@2.7.15",
+        "viem": "https://esm.sh/viem@2.7.15",
+        "@tanstack/react-query": "https://esm.sh/@tanstack/react-query@5.25.0?deps=react@19.2.3,react-dom@19.2.3",
+        "@rainbow-me/rainbowkit": "https://esm.sh/@rainbow-me/rainbowkit@2.0.2?deps=react@19.2.3,react-dom@19.2.3,wagmi@2.5.7,viem@2.7.15,@tanstack/react-query@5.25.0"
+      }
+    }
+    </script>
+  </head>
+  <body class="bg-meebot-bg text-meebot-text-primary">
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
 </html>
