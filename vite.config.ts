@@ -15,22 +15,16 @@ export default defineConfig({
         globals: { Buffer: true, global: true, process: true }
       }),
     ],
-    server: {
-      host: true,
-      port: 3000,
-      strictPort: true,
+  server: {
+    host: true,
+    port: 3000,
+    watch: {
+      usePolling: true, // ช่วยให้เสถียรขึ้นบน Replit
     },
-    preview: {
-      host: true,
-      port: 5000,
-      strictPort: true,
-    },
-    optimizeDeps: {
-      esbuildOptions: { // แก้ไข: เติม 's' หลัง Option
-        define: {
-          global: 'globalThis'
-        }
-      },
+    hmr: {
+      overlay: false, // ปิดการแสดง error ทับหน้าจอที่ทำให้หน้าจอค้าง
+    }
+  },
       // เพิ่ม Library สำคัญที่ต้องทำ Pre-bundle เพื่อป้องกันหน้าขาว/จอดำ
       include: [
         'buffer', 
