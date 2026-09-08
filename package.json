@@ -24,7 +24,7 @@
     "path": "0.12.7",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
-    "react-router-dom": "^6.30.3",
+    "react-router-dom": "^6.30.6",
     "src": "^1.1.2",
     "tailwindcss": "^4.1.18",
     "url": "0.11.4",
